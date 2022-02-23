@@ -99,7 +99,7 @@ public class BoomerangMover : MonoBehaviour
             //give spin effect on boomerang
             _rigidbody.MoveRotation(Quaternion.Euler(r.eulerAngles.x, r.eulerAngles.y * (v.z * rotateSpeed), r.eulerAngles.z));
             // move boomerang towords the predicted point
-            _rigidbody.MovePosition(_player_position + (q * v));
+            _rigidbody.MovePosition(playerPos + (q * v));
             timer += Time.deltaTime;
             yield return null;
         }
@@ -122,10 +122,18 @@ public class BoomerangMover : MonoBehaviour
     private void DrawProjectile(List<Vector3> pos)
     {
         _lineRnd.positionCount = 0;
-        _lineRnd.startWidth = .1f;
-        _lineRnd.endWidth = .1f;
+        _lineRnd.startWidth = .2f;
+        _lineRnd.endWidth = .2f;
         _lineRnd.positionCount = pos.Count;
         _lineRnd.SetPositions(pos.ToArray());
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag=="others")
+        {
+            collision.gameObject.GetComponent<MeshRenderer>().materials[0].color = Color.green;
+        }
     }
     private void OnDisable()
     {
